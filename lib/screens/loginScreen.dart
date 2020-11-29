@@ -208,14 +208,6 @@ class _LoginScreenState extends State<LoginScreen>
                                     onPressed: () => controller.dismiss(),
                                     child: Text('OK'),
                                   ),
-                                  /*actions: <Widget>[
-                                    FlatButton(
-                                        onPressed: () => controller.dismiss('Yes, I do!'),
-                                        child: Text('YES')),
-                                    FlatButton(
-                                        onPressed: () => controller.dismiss('No, I do not!'),
-                                        child: Text('NO')),
-                                  ],*/
                                 ),
                               ),
                             );

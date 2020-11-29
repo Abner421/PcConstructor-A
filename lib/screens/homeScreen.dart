@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pc_constructor_a/screens/loginScreen.dart';
@@ -41,6 +42,9 @@ class HomeScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ],
+          ),
+          SizedBox(
+            height: 35,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -102,16 +106,13 @@ class HomeScreen extends StatelessWidget {
                 label: Text("Cerrar sesión"),
                 icon: Icon(Icons.close),
                 onPressed: () async {
-                  final User user = await _auth.currentUser;
-                  if (user == null) {
-                    return;
-                  }
-                  final String uid = user.uid;
+                  _auth.signOut();
                   showDialog(
                       context: context,
                       child: AlertDialog(
-                        title: Text('Atención'),
-                        content: Text(uid + 'Sesión cerrada correctamente'),
+                        title: Text('Cierre de sesión'),
+                        content: Text(
+                            'Sesión cerrada correctamente, datos guardados'),
                         actions: [
                           FlatButton(
                             child: Text('Ok'),
@@ -132,9 +133,5 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  void _signOut() async {
-    await _auth.signOut();
   }
 }

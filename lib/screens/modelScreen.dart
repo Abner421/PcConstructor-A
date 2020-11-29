@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:giffy_dialog/giffy_dialog.dart';
 import 'package:pc_constructor_a/my_flutter_app_icons.dart';
@@ -13,6 +16,8 @@ import 'package:pc_constructor_a/screens/listview_motherboard.dart';
 import 'package:pc_constructor_a/screens/listview_procesador.dart';
 import 'package:pc_constructor_a/screens/listview_ram.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pc_constructor_a/servs/firestore_services.dart';
+import 'package:pc_constructor_a/model/modelo.dart';
 
 import 'listview_procesador.dart';
 
@@ -34,6 +39,20 @@ class _modelScreenState extends State<modelScreen> {
     false,
     false
   ];
+
+  String almacenamiento;
+  String coolerGabinete;
+  String cpuCooler;
+  String fuentePoder;
+  String gabinete;
+  String graficas;
+  String motherboard;
+  String procesador;
+  String ram;
+
+  FirestoreService _firestoreService;
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  CollectionReference _db = FirebaseFirestore.instance.collection('modelos');
 
   final String nombreComponente;
   int _currentValue = 0;
@@ -78,6 +97,7 @@ class _modelScreenState extends State<modelScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
     return Scaffold(
       appBar: GFAppBar(
         title: Text('Nuevo modelo'),
@@ -99,7 +119,8 @@ class _modelScreenState extends State<modelScreen> {
           physics: BouncingScrollPhysics(),
           children: <Widget>[
             GFButton(
-              text: 'Prueba compatibilidad',
+              text: 'Guardar modelo',
+              color: Color(0xff9a67f5),
               onPressed: () async {
                 final SharedPreferences _prefs =
                     await SharedPreferences.getInstance();
@@ -108,7 +129,6 @@ class _modelScreenState extends State<modelScreen> {
                 for (int i = 0; i < claves.length; i++) {
                   print(_prefs.get(claves[i].toString()));
                 }
-
                 await compatibles()
                     ? showDialog(
                         context: context,
@@ -131,7 +151,51 @@ class _modelScreenState extends State<modelScreen> {
                               ),
                               entryAnimation: EntryAnimation.DEFAULT,
                               onlyOkButton: true,
-                              onOkButtonPressed: () {
+                              onOkButtonPressed: () async {
+                                procesador = _prefs.get(claves[1]);
+                                motherboard = _prefs.get(claves[2]);
+                                cpuCooler = _prefs.get(claves[3]);
+                                gabinete = _prefs.get(claves[4]);
+                                graficas = _prefs.get(claves[5]);
+                                coolerGabinete = _prefs.get(claves[6]);
+                                ram = _prefs.get(claves[7]);
+                                almacenamiento = _prefs.get(claves[8]);
+                                fuentePoder = _prefs.get(claves[9]);
+                                String uid = _auth.currentUser.uid;
+                                String mid = new DateTime.now()
+                                    .microsecondsSinceEpoch
+                                    .toString();
+
+                                await _db.doc(mid).set({
+                                  'uid': uid,
+                                  'modeloId': mid,
+                                  'almacenamiento': almacenamiento,
+                                  'coolerGabinete': coolerGabinete,
+                                  'cpuCooler': cpuCooler,
+                                  'fuentePoder': fuentePoder,
+                                  'gabinete': gabinete,
+                                  'graficas': graficas,
+                                  'motherboard': motherboard,
+                                  'procesador': procesador,
+                                  'ram': ram
+                                }).then((value) => Fluttertoast.showToast(
+                                        msg: "Modelo agregado correctamente",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 4,
+                                        backgroundColor: Colors.blue[200],
+                                        textColor: Colors.white,
+                                        fontSize: 16.0)
+                                    .catchError((error) =>
+                                        Fluttertoast.showToast(
+                                            msg: "Ocurrió algún error",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 4,
+                                            backgroundColor: Colors.blue[200],
+                                            textColor: Colors.white,
+                                            fontSize: 16.0)));
+                                //Agregar función de añadir a BD
                                 Navigator.pop(context);
                               },
                             ))
