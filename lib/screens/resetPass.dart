@@ -11,25 +11,20 @@ class resetPass extends StatefulWidget {
   _resetPass createState() => _resetPass();
 }
 
-Future<void> resetPwd(String email) async{
+Future<void> resetPwd(String email) async {
   FirebaseAuth _auth = FirebaseAuth.instance;
   await _auth.sendPasswordResetEmail(email: email);
-}
-
-Future<bool> _getTimer(){
-  return Future.delayed(Duration(seconds: 2))
-      .then((value) => true);
 }
 
 class _resetPass extends State<resetPass> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  void _showScaffold(String msg){
+  void _showScaffold(String msg) {
     _scaffoldKey.currentState.showSnackBar(SnackBar(
       content: Text(msg),
     ));
   }
-  final _auth = FirebaseAuth.instance;
+
   bool showProgress = false;
 
   String email, pass;
@@ -87,17 +82,17 @@ class _resetPass extends State<resetPass> {
                 borderRadius: BorderRadius.circular(32.0),
                 child: MaterialButton(
                   onPressed: () {
-                      try{
-                        resetPwd(email);
-                        Future.delayed(Duration(seconds: 2), (){
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LoginScreen()),
-                          );
-                        });
-                        _showScaffold("Correo enviado correctamente a " + email);
-                      }catch(e){}
+                    try {
+                      resetPwd(email);
+                      Future.delayed(Duration(seconds: 2), () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LoginScreen()),
+                        );
+                      });
+                      _showScaffold("Correo enviado correctamente a " + email);
+                    } catch (e) {}
                   },
                   minWidth: 200.0,
                   height: 45.0,

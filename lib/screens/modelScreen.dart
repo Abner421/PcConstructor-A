@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:giffy_dialog/giffy_dialog.dart';
@@ -24,28 +22,25 @@ class modelScreen extends StatefulWidget {
 }
 
 class _modelScreenState extends State<modelScreen> {
-  getValuesAll(key) async {
-
-    /*final SharedPreferences prefs = await _prefs;
-    String jsonString = prefs.getString("$key");
-    var _res = jsonDecode(jsonString);
-    return _res;*/
-  }
-
-
-  List list = [
-    "Intel",
-    "AMD",
-    "Ryzen",
-    "i5",
+  getValuesAll(key) async {}
+  List<bool> check = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
   ];
 
   final String nombreComponente;
   int _currentValue = 0;
 
-  establecerValor(int value) {
+  establecerValor() {
     setState(() {
-      _currentValue = value;
+      _currentValue = _currentValue + 13;
     });
   }
 
@@ -54,6 +49,7 @@ class _modelScreenState extends State<modelScreen> {
   Future<bool> compatibles() async {
     bool compat;
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(prefs);
     //Return string
     String socket_procesador = prefs.getString('Procesador');
     String socket_motherboard = prefs.getString('Motherboard');
@@ -69,6 +65,15 @@ class _modelScreenState extends State<modelScreen> {
     (socket_procesador == socket_motherboard) ? compat = true : compat = false;
 
     return compat;
+  }
+
+  Future<bool> compPresente() async {
+    bool existe;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("----------" + prefs.toString() + "\n-------------");
+    prefs.containsKey('Motherboard') ? existe = true : existe = false;
+
+    return existe;
   }
 
   @override
@@ -96,10 +101,11 @@ class _modelScreenState extends State<modelScreen> {
             GFButton(
               text: 'Prueba compatibilidad',
               onPressed: () async {
-                final SharedPreferences _prefs = await SharedPreferences.getInstance();
+                final SharedPreferences _prefs =
+                    await SharedPreferences.getInstance();
                 List<String> claves = _prefs.getKeys().toList(growable: true);
                 print(claves);
-                for(int i=0;i<claves.length;i++){
+                for (int i = 0; i < claves.length; i++) {
                   print(_prefs.get(claves[i].toString()));
                 }
 
@@ -157,79 +163,77 @@ class _modelScreenState extends State<modelScreen> {
                             ));
               },
             ),
-            GFSearchBar(
-              searchList: list,
-              searchQueryBuilder: (query, list) {
-                return list
-                    .where((item) =>
-                        item.toLowerCase().contains(query.toLowerCase()))
-                    .toList();
-              },
-              overlaySearchListItemBuilder: (item) {
-                return Container(
-                  padding: const EdgeInsets.all(8),
-                  child: Text(
-                    item,
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                );
-              },
-              onItemSelected: (item) {
-                setState() {
-                  print('$item');
-                }
-              },
-            ),
             FAProgressBar(
               currentValue: _currentValue,
               maxValue: 100,
               size: 25,
               changeProgressColor: Colors.teal,
-              progressColor: Colors.lightGreenAccent,
+              progressColor: Colors.greenAccent,
               displayText: '%',
               animatedDuration: const Duration(milliseconds: 1000),
             ),
+            SizedBox(
+              height: 15,
+            ),
             GFTypography(
               text: 'Componentes',
+              textColor: Colors.white,
+              dividerColor: Color(0xff00e9ca),
             ),
             Card(
-              child: ListTile(
-                leading: Icon(Icons.select_all),
-                title: Text('Procesador'),
-                trailing: Icon(Icons.keyboard_arrow_right),
-                onTap: () async {
-                  establecerValor(11);
-                  Navigator.of(context).push(MaterialPageRoute(
-                    //builder: (context) => components(comp: 'Procesador'),
-                    builder: (context) => ListProcesador(),
-                  ));
-                },
+              child: GestureDetector(
+                child: ListTile(
+                  leading: Icon(Icons.select_all),
+                  title: Text('Procesador'),
+                  trailing: check[0]
+                      ? Icon(Icons.check)
+                      : Icon(Icons.keyboard_arrow_right),
+                  onTap: () async {
+                    establecerValor();
+                    Navigator.of(context).push(MaterialPageRoute(
+                      //builder: (context) => components(comp: 'Procesador'),
+                      builder: (context) => ListProcesador(),
+                    ));
+                    check[0] = !check[0]; //Cambia el ícono a seleccionado
+                  },
+                ),
               ),
             ),
             Card(
-              child: ListTile(
-                leading: Icon(Icons.blur_linear),
-                title: Text('Tarjeta madre'),
-                trailing: Icon(Icons.keyboard_arrow_right),
-                onTap: () {
-                  establecerValor(25);
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ListMotherboard(),
-                  ));
-                },
+              child: GestureDetector(
+                child: ListTile(
+                  leading: Icon(Icons.blur_linear),
+                  title: Text('Tarjeta madre'),
+                  trailing: check[1]
+                      ? Icon(Icons.check)
+                      : Icon(Icons.keyboard_arrow_right),
+                  onTap: () {
+                    establecerValor();
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ListMotherboard(),
+                    ));
+                    if (!check[1]) {
+                      check[1] = !check[1];
+                    } else {
+                      check[1] = check[1];
+                    }
+                  },
+                ),
               ),
-              elevation: 3,
             ),
             Card(
               child: ListTile(
                 leading: Icon(Icons.ac_unit),
                 title: Text('Enfriamiento CPU'),
-                trailing: Icon(Icons.keyboard_arrow_right),
+                trailing: check[2]
+                    ? Icon(Icons.check)
+                    : Icon(Icons.keyboard_arrow_right),
                 onTap: () {
-                  establecerValor(27);
+                  establecerValor();
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => ListCoolerCPU(),
                   ));
+                  check[2] = !check[2];
                 },
               ),
             ),
@@ -237,12 +241,15 @@ class _modelScreenState extends State<modelScreen> {
               child: ListTile(
                 leading: Icon(MyFlutterApp.icons8_workstation_24),
                 title: Text('Gabinete'),
-                trailing: Icon(Icons.keyboard_arrow_right),
+                trailing: check[3]
+                    ? Icon(Icons.check)
+                    : Icon(Icons.keyboard_arrow_right),
                 onTap: () {
-                  establecerValor(39);
+                  establecerValor();
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => ListGabinete(),
                   ));
+                  check[3] = !check[3];
                 },
               ),
             ),
@@ -250,16 +257,15 @@ class _modelScreenState extends State<modelScreen> {
               child: ListTile(
                 leading: Icon(Icons.card_membership),
                 title: Text('Tarjeta gráfica'),
-                trailing: Icon(Icons.keyboard_arrow_right),
+                trailing: check[4]
+                    ? Icon(Icons.check)
+                    : Icon(Icons.keyboard_arrow_right),
                 onTap: () {
-                  establecerValor(51);
+                  establecerValor();
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => ListGraficas(),
                   ));
-                  GFProgressBar(
-                    percentage: 0.4,
-                    animation: true,
-                  );
+                  check[4] = !check[4];
                 },
               ),
             ),
@@ -267,12 +273,15 @@ class _modelScreenState extends State<modelScreen> {
               child: ListTile(
                 leading: Icon(Icons.compare_arrows),
                 title: Text('Enfriamiento gabinete'),
-                trailing: Icon(Icons.keyboard_arrow_right),
+                trailing: check[5]
+                    ? Icon(Icons.check)
+                    : Icon(Icons.keyboard_arrow_right),
                 onTap: () {
-                  establecerValor(63);
+                  establecerValor();
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => ListCoolerGabinete(),
                   ));
+                  check[5] = !check[5];
                 },
               ),
             ),
@@ -280,12 +289,15 @@ class _modelScreenState extends State<modelScreen> {
               child: ListTile(
                 leading: Icon(Icons.memory),
                 title: Text('Memoria RAM'),
-                trailing: Icon(Icons.keyboard_arrow_right),
+                trailing: check[6]
+                    ? Icon(Icons.check)
+                    : Icon(Icons.keyboard_arrow_right),
                 onTap: () {
-                  establecerValor(75);
+                  establecerValor();
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => ListRAM(),
                   ));
+                  check[6] = !check[6];
                 },
               ),
             ),
@@ -293,12 +305,15 @@ class _modelScreenState extends State<modelScreen> {
               child: ListTile(
                 leading: Icon(Icons.storage),
                 title: Text('Almacenamiento'),
-                trailing: Icon(Icons.keyboard_arrow_right),
+                trailing: check[7]
+                    ? Icon(Icons.check)
+                    : Icon(Icons.keyboard_arrow_right),
                 onTap: () {
-                  establecerValor(87);
+                  establecerValor();
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => ListAlmacenamiento(),
                   ));
+                  check[7] = !check[7];
                 },
               ),
             ),
@@ -306,12 +321,15 @@ class _modelScreenState extends State<modelScreen> {
               child: ListTile(
                 leading: Icon(Icons.flash_on),
                 title: Text('Fuente de poder'),
-                trailing: Icon(Icons.keyboard_arrow_right),
+                trailing: check[8]
+                    ? Icon(Icons.check)
+                    : Icon(Icons.keyboard_arrow_right),
                 onTap: () {
-                  establecerValor(100);
+                  establecerValor();
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => ListFuentePoder(),
                   ));
+                  check[8] = !check[8];
                 },
               ),
             ),
@@ -319,11 +337,5 @@ class _modelScreenState extends State<modelScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
   }
 }

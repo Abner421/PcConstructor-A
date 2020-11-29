@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:expansion_card/expansion_card.dart';
-import 'package:pc_constructor_a/screens/modelScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -22,9 +21,6 @@ class ListMotherboard extends StatefulWidget {
 }
 
 class _ListMotherboard extends State<ListMotherboard> {
-  Color _iconColor = Colors.white;
-  Color _intel = Colors.grey[500];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,16 +128,24 @@ class _ListMotherboard extends State<ListMotherboard> {
                                           context: context,
                                           type: AlertType.success,
                                           title: "Componente añadido",
-                                          desc: "El componente se ha añadido de manera exitosa",
+                                          desc:
+                                              "El componente se ha añadido de manera exitosa",
                                           buttons: [
                                             DialogButton(
                                               child: Text(
                                                 "OK",
-                                                style: TextStyle(color: Colors.white, fontSize: 20),
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 20),
                                               ),
-                                              onPressed: () => Navigator.push(context, MaterialPageRoute(
-                                                builder: (context) => modelScreen(),
-                                              )),
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                              // () => Navigator.push(
+                                              //     context,
+                                              //     MaterialPageRoute(
+                                              //       builder: (context) =>
+                                              //           modelScreen(),
+                                              //     )),
                                               width: 120,
                                             )
                                           ],
@@ -160,7 +164,9 @@ class _ListMotherboard extends State<ListMotherboard> {
             } else if (snapshot.connectionState == ConnectionState.none) {
               return Text("No hay datos");
             }
-            return CircularProgressIndicator();
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           },
         ),
       ),

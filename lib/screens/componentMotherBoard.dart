@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pc_constructor_a/screens/modelScreen.dart';
-import 'package:getwidget/getwidget.dart';
 
-class componentsMB extends StatefulWidget{
+class componentsMB extends StatefulWidget {
   final String comp;
 
   componentsMB({
@@ -17,9 +15,8 @@ class componentsMB extends StatefulWidget{
   }
 }
 
-class _componentsMB extends State<componentsMB>{
+class _componentsMB extends State<componentsMB> {
   final String componente;
-  Color _iconColor = Colors.grey;
 
   _componentsMB({
     Key key,
@@ -37,11 +34,13 @@ class _componentsMB extends State<componentsMB>{
             children: <Widget>[
               ClipRRect(
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8.0),
-                  topRight: Radius.circular(8.0)
+                    topLeft: Radius.circular(8.0),
+                    topRight: Radius.circular(8.0)),
+                child: Image.network(
+                  "https://www.bhphotovideo.com/images/images2000x2000/amd_3990x_ryzen_threadripper_2_9_ghz_1538131.jpg",
+                  height: 150,
+                  fit: BoxFit.fill,
                 ),
-                child: Image.network("https://www.bhphotovideo.com/images/images2000x2000/amd_3990x_ryzen_threadripper_2_9_ghz_1538131.jpg", height: 150,fit: BoxFit.fill,),
-
               )
             ],
           ),

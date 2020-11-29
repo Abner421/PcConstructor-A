@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:pc_constructor_a/screens/loginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:pc_constructor_a/screens/signUpScreen.dart';
 
@@ -28,11 +27,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _onShowLogin() {
     if (mounted) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (BuildContext context) => signUpScreen(),
-        )
-      );//Función para la navegación entre pantallas (screens)
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (BuildContext context) => signUpScreen(),
+      )); //Función para la navegación entre pantallas (screens)
     }
   }
 

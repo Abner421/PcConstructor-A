@@ -8,9 +8,6 @@ import 'package:expansion_card/expansion_card.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'listview_almacenamiento.dart';
-import 'modelScreen.dart';
-
 addStringToSF(String modelo) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.remove('gabinete');
@@ -25,9 +22,6 @@ class ListGabinete extends StatefulWidget {
 }
 
 class _ListGabinete extends State<ListGabinete> {
-  Color _iconColor = Colors.white;
-  Color _intel = Colors.grey[500];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,7 +70,7 @@ class _ListGabinete extends State<ListGabinete> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
+                                      MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     Row(
                                       children: <Widget>[
@@ -114,8 +108,11 @@ class _ListGabinete extends State<ListGabinete> {
                                             color: Colors.white, fontSize: 15)),
                                     GFButton(
                                       text: 'Añadir componente',
-                                      icon: Icon(Icons.add_circle_outline, color: Colors.white,),
-                                      onPressed: (){
+                                      icon: Icon(
+                                        Icons.add_circle_outline,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () {
                                         print("Avance registrado");
 
                                         print("Añade componente...");
@@ -127,16 +124,18 @@ class _ListGabinete extends State<ListGabinete> {
                                           context: context,
                                           type: AlertType.success,
                                           title: "Componente añadido",
-                                          desc: "El componente se ha añadido de manera exitosa",
+                                          desc:
+                                              "El componente se ha añadido de manera exitosa",
                                           buttons: [
                                             DialogButton(
                                               child: Text(
                                                 "OK",
-                                                style: TextStyle(color: Colors.white, fontSize: 20),
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 20),
                                               ),
-                                              onPressed: () => Navigator.push(context, MaterialPageRoute(
-                                                builder: (context) => modelScreen(),
-                                              )),
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
                                               width: 120,
                                             )
                                           ],
@@ -155,7 +154,9 @@ class _ListGabinete extends State<ListGabinete> {
             } else if (snapshot.connectionState == ConnectionState.none) {
               return Text("No hay datos");
             }
-            return CircularProgressIndicator();
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           },
         ),
       ),

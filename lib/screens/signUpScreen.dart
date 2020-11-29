@@ -1,6 +1,7 @@
 import 'package:flash/flash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:getwidget/getwidget.dart';
@@ -63,12 +64,12 @@ class _signUpScreen extends State<signUpScreen>
                         borderRadius: BorderRadius.all(Radius.circular(32.0))),
                     contentPadding: EdgeInsets.all(12.0)),
               ),
-              SizedBox(height: 20,),
-              Text(
-                  'La contraseña debe contener:\n'
-                      'Entre 8 y 16 caracteres\n'
-                      'Al menos 1 dígito, 1 mayúscula y 1 minúscula\n'
+              SizedBox(
+                height: 20,
               ),
+              Text('La contraseña debe contener:\n'
+                  'Entre 8 y 16 caracteres\n'
+                  'Al menos 1 dígito, 1 mayúscula y 1 minúscula\n'),
               SizedBox(height: 20.0),
               Material(
                 elevation: 5,
@@ -80,7 +81,7 @@ class _signUpScreen extends State<signUpScreen>
                       showProgress = true;
                     });
                     try {
-                      if(!EmailValidator.validate(email)){
+                      if (!EmailValidator.validate(email)) {
                         print("Email no válido");
                         setState(() {
                           showProgress = false;
@@ -104,12 +105,20 @@ class _signUpScreen extends State<signUpScreen>
                               forwardAnimationCurve: Curves.easeInCirc,
                               reverseAnimationCurve: Curves.bounceIn,
                               child: DefaultTextStyle(
-                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16.0),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16.0),
                                 child: FlashBar(
                                   title: Text('Error'),
-                                  message: Text('El formato de email es incorrecto, veríficalo'),
+                                  message: Text(
+                                      'El formato de email es incorrecto, veríficalo'),
                                   leftBarIndicatorColor: Colors.red,
-                                  icon: Icon(Icons.info_outline, color: Colors.red,size: 35,),
+                                  icon: Icon(
+                                    Icons.info_outline,
+                                    color: Colors.red,
+                                    size: 35,
+                                  ),
                                   primaryAction: FlatButton(
                                     onPressed: () => controller.dismiss(),
                                     child: Text('OK'),
@@ -127,11 +136,21 @@ class _signUpScreen extends State<signUpScreen>
                             );
                           },
                         );
-                      }else{
+                      } else {
                         final newuser =
-                        await _auth.createUserWithEmailAndPassword(
-                            email: email, password: pass);
+                            await _auth.createUserWithEmailAndPassword(
+                                email: email, password: pass);
                         if (newuser != null) {
+                          _auth.currentUser.sendEmailVerification();
+                          Fluttertoast.showToast(
+                              msg:
+                                  "Un correo de verificación ha sido enviado. Revisa tu correo 📧",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 4,
+                              backgroundColor: Colors.blue[200],
+                              textColor: Colors.white,
+                              fontSize: 16.0);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -148,8 +167,10 @@ class _signUpScreen extends State<signUpScreen>
                   height: 45.0,
                   child: Text(
                     'Registrar',
-                    style:
-                        TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0, color: Colors.white),
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 20.0,
+                        color: Colors.white),
                   ),
                 ),
               ),

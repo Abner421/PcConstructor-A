@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pc_constructor_a/screens/listview_procesador.dart';
 import 'package:pc_constructor_a/screens/loginScreen.dart';
 import 'package:pc_constructor_a/screens/modelScreen.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeScreen extends StatelessWidget {

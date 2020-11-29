@@ -1,3 +1,4 @@
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pc_constructor_a/screens/homeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -65,7 +66,6 @@ class _LoginScreenState extends State<LoginScreen>
     return Scaffold(
       body: _logged ? HomeScreen(mensaje: mensaje) : loginForm(),
     );
-
   }
 
   Widget loginForm() {
@@ -128,7 +128,9 @@ class _LoginScreenState extends State<LoginScreen>
                   ),
                   onSaved: (text) => _contrasena = text,
                 ),
-                SizedBox(height: 25.0,),
+                SizedBox(
+                  height: 25.0,
+                ),
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -142,21 +144,31 @@ class _LoginScreenState extends State<LoginScreen>
                         color: Colors.blue, fontWeight: FontWeight.w900),
                   ),
                 ),
-                SizedBox(height: 15,),
+                SizedBox(
+                  height: 15,
+                ),
                 IconButton(
                   onPressed: () async {
-                    if(_key.currentState.validate()){
+                    if (_key.currentState.validate()) {
                       _key.currentState.save();
                       try {
                         final newUser = await _auth.signInWithEmailAndPassword(
                             email: _correo, password: _contrasena);
                         print(newUser.toString());
-                        if(newUser!=null){
+                        if (!newUser.user.emailVerified) {
+                          Fluttertoast.showToast(
+                              msg: "Verifica tu cuenta antes de poder acceder",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 4,
+                              backgroundColor: Colors.red[600],
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                        } else {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => HomeScreen(
-                                mensaje: 'loggeado',
-                              )
-                          ));
+                                    mensaje: 'loggeado',
+                                  )));
                         }
                       } catch (e) {
                         showFlash(
@@ -178,12 +190,20 @@ class _LoginScreenState extends State<LoginScreen>
                               forwardAnimationCurve: Curves.easeInCirc,
                               reverseAnimationCurve: Curves.bounceIn,
                               child: DefaultTextStyle(
-                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16.0),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16.0),
                                 child: FlashBar(
                                   title: Text('Error'),
-                                  message: Text('Fallo en el inicio de sesión, verifica los datos'),
+                                  message: Text(
+                                      'Fallo en el inicio de sesión, verifica los datos'),
                                   leftBarIndicatorColor: Colors.red,
-                                  icon: Icon(Icons.info_outline, color: Colors.red,size: 35,),
+                                  icon: Icon(
+                                    Icons.info_outline,
+                                    color: Colors.red,
+                                    size: 35,
+                                  ),
                                   primaryAction: FlatButton(
                                     onPressed: () => controller.dismiss(),
                                     child: Text('OK'),
