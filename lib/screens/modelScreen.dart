@@ -166,7 +166,7 @@ class _modelScreenState extends State<modelScreen> {
                                     .microsecondsSinceEpoch
                                     .toString();
 
-                                await _db.doc(mid).set({
+                                await _db.doc().set({
                                   'uid': uid,
                                   'modeloId': mid,
                                   'almacenamiento': almacenamiento,

@@ -1,9 +1,9 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pc_constructor_a/screens/loginScreen.dart';
 import 'package:pc_constructor_a/screens/modelScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pc_constructor_a/screens/modelos_creados.dart';
 
 class HomeScreen extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -66,34 +66,30 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           ),
+          SizedBox(
+            height: 15,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               RaisedButton.icon(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                color: Colors.grey,
+                color: Colors.orange,
                 textColor: Colors.white,
                 label: Text("Modelos creados"),
                 icon: Icon(Icons.save_alt),
                 onPressed: () {
-                  showDialog(
-                      context: context,
-                      child: AlertDialog(
-                        title: Text('Atención'),
-                        content: Text('Opción no disponible por el momento ):'),
-                        actions: [
-                          FlatButton(
-                            child: Text('Ok'),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          )
-                        ],
-                      ));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ModelosCreados()),
+                  );
                 },
               ),
             ],
+          ),
+          SizedBox(
+            height: 15,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
