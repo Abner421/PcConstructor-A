@@ -16,6 +16,12 @@ addStringToSF(String modelo) async {
   prefs.setString('Procesador', modelo);
 }
 
+addModelo(String modelo) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.remove('ModeloProc');
+  prefs.setString('ModeloProcs', modelo);
+}
+
 actualizaValor() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int c = (prefs.getInt('avance') ?? 0) + 11;
@@ -143,6 +149,9 @@ class _ListProcesador extends State<ListProcesador> {
                                         print("Añade componente...");
                                         addStringToSF(snapshot.data.docs[index]
                                             .data()['Socket']
+                                            .toString());
+                                        addModelo(snapshot.data.docs[index]
+                                            .data()['Modelo']
                                             .toString());
                                         print("...Compontente añadido");
                                         Alert(

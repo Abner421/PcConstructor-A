@@ -17,7 +17,6 @@ import 'package:pc_constructor_a/screens/listview_procesador.dart';
 import 'package:pc_constructor_a/screens/listview_ram.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pc_constructor_a/servs/firestore_services.dart';
-import 'package:pc_constructor_a/model/modelo.dart';
 
 import 'listview_procesador.dart';
 
@@ -59,7 +58,11 @@ class _modelScreenState extends State<modelScreen> {
 
   establecerValor() {
     setState(() {
-      _currentValue = _currentValue + 13;
+      if (_currentValue < 100) {
+        _currentValue = _currentValue + 13;
+      } else {
+        _currentValue = 100;
+      }
     });
   }
 
@@ -153,20 +156,19 @@ class _modelScreenState extends State<modelScreen> {
                               onlyOkButton: true,
                               onOkButtonPressed: () async {
                                 procesador = _prefs.get(claves[1]);
-                                motherboard = _prefs.get(claves[2]);
-                                cpuCooler = _prefs.get(claves[3]);
-                                gabinete = _prefs.get(claves[4]);
-                                graficas = _prefs.get(claves[5]);
-                                coolerGabinete = _prefs.get(claves[6]);
-                                ram = _prefs.get(claves[7]);
+                                motherboard = _prefs.get(claves[4]);
+                                cpuCooler = _prefs.get(claves[5]);
+                                gabinete = _prefs.get(claves[6]);
+                                graficas = _prefs.get(claves[7]);
+                                coolerGabinete = _prefs.get(claves[10]);
+                                ram = _prefs.get(claves[9]);
                                 almacenamiento = _prefs.get(claves[8]);
-                                fuentePoder = _prefs.get(claves[9]);
+                                fuentePoder = _prefs.get(claves[11]);
                                 String uid = _auth.currentUser.uid;
                                 String mid = new DateTime.now()
                                     .microsecondsSinceEpoch
                                     .toString();
-
-                                await _db.doc().set({
+                                await _db.doc(mid).set({
                                   'uid': uid,
                                   'modeloId': mid,
                                   'almacenamiento': almacenamiento,
@@ -183,7 +185,7 @@ class _modelScreenState extends State<modelScreen> {
                                         toastLength: Toast.LENGTH_SHORT,
                                         gravity: ToastGravity.BOTTOM,
                                         timeInSecForIosWeb: 4,
-                                        backgroundColor: Colors.blue[200],
+                                        backgroundColor: Colors.green,
                                         textColor: Colors.white,
                                         fontSize: 16.0)
                                     .catchError((error) =>
@@ -258,7 +260,11 @@ class _modelScreenState extends State<modelScreen> {
                       //builder: (context) => components(comp: 'Procesador'),
                       builder: (context) => ListProcesador(),
                     ));
-                    check[0] = !check[0]; //Cambia el ícono a seleccionado
+                    if (!check[0]) {
+                      check[0] = !check[0];
+                    } else {
+                      check[0] = check[0];
+                    }
                   },
                 ),
               ),
@@ -297,7 +303,11 @@ class _modelScreenState extends State<modelScreen> {
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => ListCoolerCPU(),
                   ));
-                  check[2] = !check[2];
+                  if (!check[2]) {
+                    check[2] = !check[2];
+                  } else {
+                    check[2] = check[2];
+                  }
                 },
               ),
             ),
@@ -313,7 +323,11 @@ class _modelScreenState extends State<modelScreen> {
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => ListGabinete(),
                   ));
-                  check[3] = !check[3];
+                  if (!check[3]) {
+                    check[3] = !check[3];
+                  } else {
+                    check[3] = check[3];
+                  }
                 },
               ),
             ),
@@ -329,7 +343,11 @@ class _modelScreenState extends State<modelScreen> {
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => ListGraficas(),
                   ));
-                  check[4] = !check[4];
+                  if (!check[4]) {
+                    check[4] = !check[4];
+                  } else {
+                    check[4] = check[4];
+                  }
                 },
               ),
             ),
@@ -345,7 +363,11 @@ class _modelScreenState extends State<modelScreen> {
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => ListCoolerGabinete(),
                   ));
-                  check[5] = !check[5];
+                  if (!check[5]) {
+                    check[5] = !check[5];
+                  } else {
+                    check[5] = check[5];
+                  }
                 },
               ),
             ),
@@ -361,7 +383,11 @@ class _modelScreenState extends State<modelScreen> {
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => ListRAM(),
                   ));
-                  check[6] = !check[6];
+                  if (!check[6]) {
+                    check[6] = !check[6];
+                  } else {
+                    check[6] = check[6];
+                  }
                 },
               ),
             ),
@@ -377,7 +403,11 @@ class _modelScreenState extends State<modelScreen> {
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => ListAlmacenamiento(),
                   ));
-                  check[7] = !check[7];
+                  if (!check[7]) {
+                    check[7] = !check[7];
+                  } else {
+                    check[7] = check[7];
+                  }
                 },
               ),
             ),
@@ -393,7 +423,11 @@ class _modelScreenState extends State<modelScreen> {
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => ListFuentePoder(),
                   ));
-                  check[8] = !check[8];
+                  if (!check[9]) {
+                    check[9] = !check[9];
+                  } else {
+                    check[9] = check[9];
+                  }
                 },
               ),
             ),

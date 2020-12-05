@@ -15,6 +15,12 @@ addStringToSF(String modelo) async {
   prefs.setString('Motherboard', modelo);
 }
 
+addModelo(String modelo) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.remove('ModeloMBoard');
+  prefs.setString('ModeloMBoard', modelo);
+}
+
 class ListMotherboard extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _ListMotherboard();
@@ -122,6 +128,9 @@ class _ListMotherboard extends State<ListMotherboard> {
                                             .toString());
                                         addStringToSF(snapshot.data.docs[index]
                                             .data()['Socket']
+                                            .toString());
+                                        addModelo(snapshot.data.docs[index]
+                                            .data()['Modelo']
                                             .toString());
                                         print("...Compontente añadido");
                                         Alert(
